@@ -2,179 +2,129 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI Virtual Workshop V2</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>AI Virtual Workshop V3</title>
 
 <style>
 *{box-sizing:border-box}
 body{
-  margin:0;
-  font-family:Arial,sans-serif;
-  background:#0b1020;
-  color:#eef2ff;
+ margin:0;font-family:Arial,sans-serif;background:#0b1020;color:#eef2ff;
 }
 header{
-  padding:14px 18px;
-  background:#11182d;
-  border-bottom:1px solid #26304d;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
+ padding:14px 18px;background:#11182d;border-bottom:1px solid #26304d;
+ display:flex;justify-content:space-between;align-items:center;gap:10px;
 }
 .logo{font-weight:bold;font-size:18px}
-.badge{
-  font-size:12px;
-  background:#1d2948;
-  padding:6px 9px;
-  border-radius:8px;
-}
+.badge{font-size:12px;background:#1d2948;padding:6px 9px;border-radius:8px}
 .app{
-  display:grid;
-  grid-template-columns:230px 1fr 280px;
-  height:calc(100vh - 61px);
+ display:grid;grid-template-columns:225px 1fr 310px;height:calc(100vh - 61px);
 }
 .panel{
-  background:#10172a;
-  padding:14px;
-  overflow:auto;
-  border-right:1px solid #26304d;
+ background:#10172a;padding:14px;overflow:auto;border-right:1px solid #26304d;
 }
 .right{border-left:1px solid #26304d;border-right:0}
 h3{margin:4px 0 12px;font-size:14px}
 .component{
-  background:#18213a;
-  border:1px solid #2c3858;
-  padding:10px;
-  margin-bottom:8px;
-  border-radius:9px;
-  cursor:pointer;
-  user-select:none;
+ background:#18213a;border:1px solid #2c3858;padding:10px;margin-bottom:7px;
+ border-radius:9px;cursor:pointer;user-select:none;
 }
 .component:hover{background:#202c49}
 .component small{display:block;color:#9aa8c7;margin-top:3px}
 button{
-  border:0;
-  border-radius:8px;
-  padding:10px 12px;
-  margin:4px 0;
-  cursor:pointer;
-  background:#263557;
-  color:white;
-  width:100%;
+ border:0;border-radius:8px;padding:10px 12px;margin:4px 0;cursor:pointer;
+ background:#263557;color:white;width:100%;
 }
 button:hover{filter:brightness(1.15)}
 .primary{background:#315fd4}
 .danger{background:#a83d4a}
 .success{background:#287c59}
+.orange{background:#8c5b20}
 
 #workspace{
-  position:relative;
-  overflow:hidden;
-  background:
-    linear-gradient(#18213a 1px,transparent 1px),
-    linear-gradient(90deg,#18213a 1px,transparent 1px);
-  background-size:25px 25px;
+ position:relative;overflow:hidden;
+ background:
+ linear-gradient(#18213a 1px,transparent 1px),
+ linear-gradient(90deg,#18213a 1px,transparent 1px);
+ background-size:25px 25px;
 }
-#board{
-  position:absolute;
-  inset:0;
-}
+#board{position:absolute;inset:0}
+
 .part{
-  position:absolute;
-  width:150px;
-  min-height:75px;
-  background:#18233d;
-  border:2px solid #53658e;
-  border-radius:10px;
-  padding:10px;
-  cursor:move;
-  z-index:5;
-  box-shadow:0 8px 20px #0005;
+ position:absolute;width:155px;min-height:78px;background:#18233d;
+ border:2px solid #53658e;border-radius:10px;padding:10px;cursor:move;
+ z-index:5;box-shadow:0 8px 20px #0005;touch-action:none;
 }
-.part.selected{border-color:#7fa2ff}
+.part.selected{border-color:#7fa2ff;box-shadow:0 0 0 2px #315fd455}
 .part-title{font-weight:bold}
 .part-info{font-size:11px;color:#9eacce;margin-top:4px}
+
 .pin{
-  position:absolute;
-  width:14px;
-  height:14px;
-  border-radius:50%;
-  background:#dce7ff;
-  border:2px solid #4c67a0;
-  cursor:pointer;
-  z-index:8;
+ position:absolute;width:14px;height:14px;border-radius:50%;
+ background:#dce7ff;border:2px solid #4c67a0;cursor:pointer;z-index:8;
 }
 .pin:hover{transform:scale(1.3)}
 .pin.left{left:-8px}
 .pin.right{right:-8px}
-.pin.top{top:-8px}
-.pin.bottom{bottom:-8px}
 .pin-label{
-  position:absolute;
-  font-size:9px;
-  color:#c8d2ea;
-  white-space:nowrap;
+ position:absolute;font-size:9px;color:#c8d2ea;white-space:nowrap;
 }
-.left .pin-label{left:12px;top:-3px}
-.right .pin-label{right:12px;top:-3px}
+.pin.left .pin-label{left:12px;top:-3px}
+.pin.right .pin-label{right:12px;top:-3px}
 
 svg{
-  position:absolute;
-  inset:0;
-  width:100%;
-  height:100%;
-  pointer-events:none;
-  z-index:3;
-}
-wire{
-  stroke:#58d68d;
-  stroke-width:4;
-  fill:none;
+ position:absolute;inset:0;width:100%;height:100%;
+ pointer-events:none;z-index:3;
 }
 .wire-line{
-  stroke:#58d68d;
-  stroke-width:4;
-  fill:none;
-  pointer-events:stroke;
-  cursor:pointer;
+ stroke:#58d68d;stroke-width:4;fill:none;
+ pointer-events:stroke;cursor:pointer;
 }
+.wire-line.power{stroke:#ffbd59}
+.wire-line.error{stroke:#ff6666}
 
 .status{
-  background:#151f36;
-  border:1px solid #293653;
-  border-radius:9px;
-  padding:10px;
-  margin-bottom:10px;
-  font-size:12px;
+ background:#151f36;border:1px solid #293653;border-radius:9px;
+ padding:10px;margin-bottom:10px;font-size:12px;
 }
 .item{
-  padding:7px 0;
-  border-bottom:1px solid #25304a;
-  font-size:12px;
+ padding:7px 0;border-bottom:1px solid #25304a;font-size:12px;
 }
 .ok{color:#6fe3a3}
 .error{color:#ff7777}
 .warning{color:#ffd166}
+.info{color:#72b7ff}
 
 .stat{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:6px;
-  margin-bottom:12px;
+ display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:12px;
 }
 .stat div{
-  background:#18213a;
-  padding:8px;
-  border-radius:7px;
-  font-size:11px;
+ background:#18213a;padding:8px;border-radius:7px;font-size:11px;
 }
 .stat b{display:block;font-size:15px;margin-top:3px}
 
+.measure{
+ display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px;
+}
+.measure div{
+ background:#18213a;border-radius:7px;padding:8px;
+ font-size:10px;color:#9eacce;
+}
+.measure b{display:block;color:#fff;font-size:14px;margin-top:3px}
+
+.log{
+ max-height:220px;overflow:auto;font-size:11px;line-height:1.6;
+}
+.log div{border-bottom:1px solid #26304d;padding:5px 0}
+
+.legend{
+ font-size:10px;color:#9eacce;margin:8px 0 12px;line-height:1.5;
+}
+
 @media(max-width:900px){
-  .app{grid-template-columns:1fr;height:auto}
-  .panel{border:0;border-bottom:1px solid #26304d}
-  .right{border:0}
-  #workspace{height:65vh}
+ .app{grid-template-columns:1fr;height:auto}
+ .panel{border:0;border-bottom:1px solid #26304d}
+ .right{border:0}
+ #workspace{height:65vh;min-height:480px}
 }
 </style>
 </head>
@@ -182,116 +132,181 @@ wire{
 <body>
 
 <header>
-  <div class="logo">AI VIRTUAL WORKSHOP</div>
-  <div class="badge">V2 • Interactive Electronics Lab</div>
+ <div class="logo">AI VIRTUAL WORKSHOP</div>
+ <div class="badge">V3 • Electrical Engine</div>
 </header>
 
 <div class="app">
 
-<!-- LEFT -->
+<!-- LEFT PANEL -->
 <aside class="panel">
+
 <h3>COMPONENTS</h3>
 
 <div class="component" onclick="addPart('ESP32-S3')">
-ESP32-S3
-<small>Microcontroller</small>
+ ESP32-S3
+ <small>3.3V MCU • GPIO</small>
 </div>
 
 <div class="component" onclick="addPart('5V Supply')">
-5V Supply
-<small>Power source</small>
+ 5V Supply
+ <small>DC source</small>
 </div>
 
 <div class="component" onclick="addPart('12V Supply')">
-12V Supply
-<small>Power source</small>
+ 12V Supply
+ <small>DC source</small>
 </div>
 
 <div class="component" onclick="addPart('Resistor')">
-Resistor
-<small>220Ω</small>
+ Resistor
+ <small>220Ω • 0.25W</small>
 </div>
 
 <div class="component" onclick="addPart('LED')">
-LED
-<small>5mm LED</small>
+ LED
+ <small>VF 2.0V • max 20mA</small>
 </div>
 
 <div class="component" onclick="addPart('RGB LED')">
-RGB LED
-<small>3 channel</small>
+ RGB LED
+ <small>3 channels</small>
 </div>
 
 <div class="component" onclick="addPart('Switch')">
-Switch
-<small>SPST</small>
+ Switch
+ <small>SPST</small>
 </div>
 
 <div class="component" onclick="addPart('MOSFET')">
-MOSFET
-<small>N-channel</small>
+ MOSFET
+ <small>N-channel</small>
 </div>
 
 <div class="component" onclick="addPart('Fuse')">
-Fuse
-<small>5A</small>
+ Fuse
+ <small>5A</small>
 </div>
 
 <div class="component" onclick="addPart('Buck Converter')">
-Buck Converter
-<small>12V → 5V</small>
+ Buck Converter
+ <small>12V → 5V</small>
 </div>
 
 <div class="component" onclick="addPart('GND')">
-GND
-<small>Ground</small>
+ GND
+ <small>0V reference</small>
 </div>
+
+<h3 style="margin-top:18px">PROJECTS</h3>
+
+<button class="primary" onclick="smartCarTemplate()">
+ SmartCar ONE
+</button>
+
+<button onclick="starterCircuit()">
+ LED Test Circuit
+</button>
 
 <h3 style="margin-top:18px">TOOLS</h3>
 
-<button class="primary" onclick="diagnose()">Run Diagnostics</button>
-<button class="success" onclick="simulate()">Run Simulation</button>
-<button onclick="saveProject()">Save Project</button>
-<button onclick="loadProject()">Load Project</button>
-<button class="danger" onclick="clearBoard()">Clear Board</button>
+<button class="primary" onclick="diagnose()">
+ Run Diagnostics
+</button>
+
+<button class="success" onclick="simulate()">
+ Run Electrical Simulation
+</button>
+
+<button class="orange" onclick="inspectCircuit()">
+ Inspect Circuit
+</button>
+
+<button onclick="saveProject()">
+ Save Project
+</button>
+
+<button onclick="loadProject()">
+ Load Project
+</button>
+
+<button class="danger" onclick="clearBoard()">
+ Clear Board
+</button>
 
 </aside>
 
+
 <!-- WORKSPACE -->
 <main id="workspace">
-  <div id="board"></div>
-  <svg id="wires"></svg>
+
+ <div id="board"></div>
+
+ <svg id="wires"></svg>
+
 </main>
 
-<!-- RIGHT -->
+
+<!-- RIGHT PANEL -->
 <aside class="panel right">
 
 <h3>SYSTEM STATUS</h3>
 
 <div class="stat">
-<div>Parts<b id="partCount">0</b></div>
-<div>Wires<b id="wireCount">0</b></div>
+ <div>Parts<b id="partCount">0</b></div>
+ <div>Wires<b id="wireCount">0</b></div>
+</div>
+
+<div class="measure">
+ <div>Voltage<b id="voltageValue">—</b></div>
+ <div>Current<b id="currentValue">—</b></div>
+ <div>Power<b id="powerValue">—</b></div>
+ <div>State<b id="stateValue">IDLE</b></div>
 </div>
 
 <div id="status" class="status">
-Select a pin to start wiring.
+ Select a pin to start wiring.
 </div>
+
+
+<h3>ENGINE</h3>
+
+<div id="engine" class="status">
+ Electrical engine ready.
+</div>
+
 
 <h3>DIAGNOSTICS</h3>
+
 <div id="diagnostics" class="status">
-No diagnostics run.
+ No diagnostics run.
 </div>
 
+
 <h3>BILL OF MATERIALS</h3>
+
 <div id="bom" class="status">
-No components.
+ No components.
+</div>
+
+
+<h3>ENGINE LOG</h3>
+
+<div id="log" class="status log">
+ No simulation executed.
 </div>
 
 </aside>
 
 </div>
 
+
 <script>
+
+/* =========================================================
+   AI VIRTUAL WORKSHOP V3
+   Basic DC electrical engine
+========================================================= */
 
 let parts=[];
 let wires=[];
@@ -318,430 +333,1316 @@ const pinMap={
  "GND":["GND"]
 };
 
-function addPart(type,x=100+Math.random()*250,y=80+Math.random()*250){
 
-  const part={
-    id:nextId++,
-    type,
-    x,
-    y,
-    pins:pinMap[type].map(name=>({name}))
-  };
+/* =========================================================
+   COMPONENT ELECTRICAL MODELS
+========================================================= */
 
-  parts.push(part);
-  render();
-  updateInfo();
+const models={
+
+ "5V Supply":{
+   source:true,
+   voltage:5
+ },
+
+ "12V Supply":{
+   source:true,
+   voltage:12
+ },
+
+ "Resistor":{
+   resistance:220,
+   powerRating:0.25
+ },
+
+ "LED":{
+   resistance:10,
+   forwardVoltage:2.0,
+   maxCurrent:0.020,
+   powerRating:0.10
+ },
+
+ "RGB LED":{
+   forwardVoltage:2.0,
+   maxCurrent:0.020
+ },
+
+ "Fuse":{
+   resistance:0.05,
+   maxCurrent:5
+ },
+
+ "Switch":{
+   resistance:0.05,
+   closed:true
+ },
+
+ "MOSFET":{
+   resistance:0.05
+ },
+
+ "Buck Converter":{
+   inputVoltageMax:24,
+   outputVoltage:5,
+   efficiency:0.90
+ },
+
+ "ESP32-S3":{
+   logicVoltage:3.3
+ },
+
+ "GND":{
+   ground:true
+ }
+
+};
+
+
+/* =========================================================
+   ADD COMPONENT
+========================================================= */
+
+function addPart(type,x=100+Math.random()*300,y=80+Math.random()*250){
+
+ const part={
+   id:nextId++,
+   type,
+   x,
+   y,
+   pins:pinMap[type].map(name=>({name}))
+ };
+
+ parts.push(part);
+
+ render();
+ updateInfo();
+
+ setStatus(
+   `${type} added. Select its pins to create connections.`
+ );
 }
+
+
+/* =========================================================
+   RENDER
+========================================================= */
 
 function render(){
 
-  board.innerHTML="";
+ board.innerHTML="";
 
-  parts.forEach(part=>{
+ parts.forEach(part=>{
 
-    const el=document.createElement("div");
-    el.className="part";
-    el.dataset.id=part.id;
-    el.style.left=part.x+"px";
-    el.style.top=part.y+"px";
+   const el=document.createElement("div");
 
-    el.innerHTML=`
-      <div class="part-title">${part.type}</div>
-      <div class="part-info">ID: ${part.id}</div>
-    `;
+   el.className="part";
+   el.dataset.id=part.id;
 
-    part.pins.forEach((p,index)=>{
+   el.style.left=part.x+"px";
+   el.style.top=part.y+"px";
 
-      const pin=document.createElement("div");
-      pin.className="pin";
+   el.innerHTML=`
+     <div class="part-title">${part.type}</div>
+     <div class="part-info">ID: ${part.id}</div>
+   `;
 
-      let position="left";
+   part.pins.forEach((p,index)=>{
 
-      if(part.type==="RGB LED"){
-        position=index<3?"right":"left";
-      }
-      else if(part.type==="Buck Converter"){
-        position=index<2?"left":"right";
-      }
-      else if(part.pins.length>2){
-        position=index%2===0?"left":"right";
-      }
-      else{
-        position=index===0?"left":"right";
-      }
+     const pin=document.createElement("div");
 
-      pin.classList.add(position);
-      pin.style.top=(35+index*22)+"px";
+     pin.className="pin";
 
-      pin.title=p.name;
+     let position="left";
 
-      const label=document.createElement("span");
-      label.className="pin-label";
-      label.textContent=p.name;
+     if(part.type==="RGB LED"){
+       position=index<3?"right":"left";
+     }
+     else if(part.type==="Buck Converter"){
+       position=index<2?"left":"right";
+     }
+     else if(part.pins.length>2){
+       position=index%2===0?"left":"right";
+     }
+     else{
+       position=index===0?"left":"right";
+     }
 
-      pin.appendChild(label);
+     pin.classList.add(position);
 
-      pin.onclick=(e)=>{
-        e.stopPropagation();
-        pinClicked(part.id,index);
-      };
+     pin.style.top=(35+index*22)+"px";
 
-      el.appendChild(pin);
-    });
+     pin.title=p.name;
 
-    el.addEventListener("pointerdown",startDrag);
+     const label=document.createElement("span");
 
-    board.appendChild(el);
-  });
+     label.className="pin-label";
+     label.textContent=p.name;
 
-  drawWires();
+     pin.appendChild(label);
+
+     pin.onclick=e=>{
+       e.stopPropagation();
+       pinClicked(part.id,index);
+     };
+
+     el.appendChild(pin);
+
+   });
+
+   el.addEventListener("pointerdown",startDrag);
+
+   board.appendChild(el);
+
+ });
+
+ drawWires();
 }
+
+
+/* =========================================================
+   DRAGGING
+========================================================= */
 
 function startDrag(e){
 
-  if(e.target.classList.contains("pin")) return;
+ if(e.target.classList.contains("pin"))return;
 
-  const el=e.currentTarget;
-  const id=Number(el.dataset.id);
-  const part=parts.find(p=>p.id===id);
+ const el=e.currentTarget;
 
-  dragging=part;
+ const id=Number(el.dataset.id);
 
-  const rect=workspace.getBoundingClientRect();
+ const part=parts.find(p=>p.id===id);
 
-  dragOffset.x=e.clientX-rect.left-part.x;
-  dragOffset.y=e.clientY-rect.top-part.y;
+ dragging=part;
 
-  el.setPointerCapture(e.pointerId);
+ const rect=workspace.getBoundingClientRect();
 
-  el.onpointermove=(ev)=>{
-    if(!dragging)return;
+ dragOffset.x=e.clientX-rect.left-part.x;
+ dragOffset.y=e.clientY-rect.top-part.y;
 
-    const r=workspace.getBoundingClientRect();
+ el.setPointerCapture(e.pointerId);
 
-    dragging.x=ev.clientX-r.left-dragOffset.x;
-    dragging.y=ev.clientY-r.top-dragOffset.y;
+ el.onpointermove=ev=>{
 
-    el.style.left=dragging.x+"px";
-    el.style.top=dragging.y+"px";
+   if(!dragging)return;
 
-    drawWires();
-  };
+   const r=workspace.getBoundingClientRect();
 
-  el.onpointerup=()=>{
-    dragging=null;
-    el.onpointermove=null;
-    el.onpointerup=null;
-  };
+   dragging.x=ev.clientX-r.left-dragOffset.x;
+   dragging.y=ev.clientY-r.top-dragOffset.y;
+
+   el.style.left=dragging.x+"px";
+   el.style.top=dragging.y+"px";
+
+   drawWires();
+ };
+
+ el.onpointerup=()=>{
+   dragging=null;
+   el.onpointermove=null;
+   el.onpointerup=null;
+ };
+
 }
+
+
+/* =========================================================
+   PIN POSITION
+========================================================= */
 
 function getPinPosition(partId,pinIndex){
 
-  const part=parts.find(p=>p.id===partId);
-  const el=document.querySelector(`[data-id="${partId}"]`);
+ const part=parts.find(p=>p.id===partId);
 
-  if(!part||!el)return null;
+ const el=document.querySelector(`[data-id="${partId}"]`);
 
-  const pin=el.querySelectorAll(".pin")[pinIndex];
+ if(!part||!el)return null;
 
-  const pr=pin.getBoundingClientRect();
-  const wr=workspace.getBoundingClientRect();
+ const pin=el.querySelectorAll(".pin")[pinIndex];
 
-  return {
-    x:pr.left-wr.left+pr.width/2,
-    y:pr.top-wr.top+pr.height/2
-  };
+ const pr=pin.getBoundingClientRect();
+
+ const wr=workspace.getBoundingClientRect();
+
+ return{
+   x:pr.left-wr.left+pr.width/2,
+   y:pr.top-wr.top+pr.height/2
+ };
 }
+
+
+/* =========================================================
+   WIRING
+========================================================= */
 
 function pinClicked(partId,pinIndex){
 
-  if(!selectedPin){
+ if(!selectedPin){
 
-    selectedPin={partId,pinIndex};
+   selectedPin={partId,pinIndex};
 
-    const p=parts.find(x=>x.id===partId);
+   const p=parts.find(x=>x.id===partId);
 
-    document.getElementById("status").innerHTML=
-      `Selected <b>${p.type}</b> → ${p.pins[pinIndex].name}<br>Now select another pin.`;
+   setStatus(
+     `Selected <b>${p.type}</b> → ${p.pins[pinIndex].name}<br>
+      Now select another pin.`
+   );
 
-    return;
-  }
+   highlightPin(partId,pinIndex);
 
-  if(selectedPin.partId===partId &&
-     selectedPin.pinIndex===pinIndex){
+   return;
+ }
 
-    selectedPin=null;
-    return;
-  }
 
-  const duplicate=wires.some(w=>
-    (w.a.partId===selectedPin.partId &&
+ if(
+   selectedPin.partId===partId &&
+   selectedPin.pinIndex===pinIndex
+ ){
+
+   selectedPin=null;
+
+   setStatus("Selection cancelled.");
+
+   render();
+
+   return;
+ }
+
+
+ const duplicate=wires.some(w=>
+   (
+     w.a.partId===selectedPin.partId &&
      w.a.pinIndex===selectedPin.pinIndex &&
      w.b.partId===partId &&
-     w.b.pinIndex===pinIndex) ||
-    (w.b.partId===selectedPin.partId &&
+     w.b.pinIndex===pinIndex
+   )||
+   (
+     w.b.partId===selectedPin.partId &&
      w.b.pinIndex===selectedPin.pinIndex &&
      w.a.partId===partId &&
-     w.a.pinIndex===pinIndex)
-  );
+     w.a.pinIndex===pinIndex
+   )
+ );
 
-  if(!duplicate){
 
-    wires.push({
-      a:{...selectedPin},
-      b:{partId,pinIndex}
-    });
+ if(!duplicate){
 
-  }
+   wires.push({
+     a:{...selectedPin},
+     b:{partId,pinIndex}
+   });
 
-  selectedPin=null;
+ }
 
-  document.getElementById("status").textContent=
-    "Connection created. Select another pin to continue.";
 
-  render();
-  updateInfo();
+ selectedPin=null;
+
+ setStatus("Connection created.");
+
+ render();
+
+ updateInfo();
+
 }
+
+
+/* =========================================================
+   DRAW WIRES
+========================================================= */
 
 function drawWires(){
 
-  svg.innerHTML="";
+ svg.innerHTML="";
 
-  wires.forEach((w,index)=>{
+ wires.forEach((w,index)=>{
 
-    const a=getPinPosition(w.a.partId,w.a.pinIndex);
-    const b=getPinPosition(w.b.partId,w.b.pinIndex);
+   const a=getPinPosition(w.a.partId,w.a.pinIndex);
+   const b=getPinPosition(w.b.partId,w.b.pinIndex);
 
-    if(!a||!b)return;
+   if(!a||!b)return;
 
-    const line=document.createElementNS(
-      "http://www.w3.org/2000/svg",
-      "line"
-    );
+   const line=document.createElementNS(
+     "http://www.w3.org/2000/svg",
+     "line"
+   );
 
-    line.setAttribute("x1",a.x);
-    line.setAttribute("y1",a.y);
-    line.setAttribute("x2",b.x);
-    line.setAttribute("y2",b.y);
-    line.setAttribute("class","wire-line");
+   line.setAttribute("x1",a.x);
+   line.setAttribute("y1",a.y);
 
-    line.addEventListener("click",()=>{
-      if(confirm("Delete this wire?")){
-        wires.splice(index,1);
-        render();
-        updateInfo();
-      }
-    });
+   line.setAttribute("x2",b.x);
+   line.setAttribute("y2",b.y);
 
-    svg.appendChild(line);
-  });
+   line.setAttribute("class","wire-line");
+
+   line.addEventListener("click",e=>{
+
+     e.stopPropagation();
+
+     if(confirm("Delete this wire?")){
+
+       wires.splice(index,1);
+
+       render();
+       updateInfo();
+
+     }
+
+   });
+
+   svg.appendChild(line);
+
+ });
+
 }
+
+
+/* =========================================================
+   INFO
+========================================================= */
 
 function updateInfo(){
 
-  document.getElementById("partCount").textContent=parts.length;
-  document.getElementById("wireCount").textContent=wires.length;
+ document.getElementById("partCount").textContent=parts.length;
 
-  const counts={};
+ document.getElementById("wireCount").textContent=wires.length;
 
-  parts.forEach(p=>{
-    counts[p.type]=(counts[p.type]||0)+1;
-  });
+ const counts={};
 
-  let html="";
+ parts.forEach(p=>{
+   counts[p.type]=(counts[p.type]||0)+1;
+ });
 
-  Object.entries(counts).forEach(([name,count])=>{
-    html+=`<div class="item">${name} × ${count}</div>`;
-  });
+ let html="";
 
-  document.getElementById("bom").innerHTML=
-    html||"No components.";
+ Object.entries(counts).forEach(([name,count])=>{
+   html+=`<div class="item">${name} × ${count}</div>`;
+ });
+
+ document.getElementById("bom").innerHTML=
+   html||"No components.";
+
 }
 
-function diagnose(){
 
-  let messages=[];
-  let errors=0;
-  let warnings=0;
+/* =========================================================
+   ELECTRICAL GRAPH
+========================================================= */
 
-  if(parts.length===0){
-    messages.push('<div class="warning">No components on the board.</div>');
-    warnings++;
-  }
+function pinKey(partId,pinIndex){
 
-  if(parts.length>0 && wires.length===0){
-    messages.push('<div class="warning">Components exist but there are no connections.</div>');
-    warnings++;
-  }
+ return `${partId}:${pinIndex}`;
 
-  parts.forEach(p=>{
-
-    const connectedPins=new Set();
-
-    wires.forEach(w=>{
-
-      if(w.a.partId===p.id)connectedPins.add(w.a.pinIndex);
-      if(w.b.partId===p.id)connectedPins.add(w.b.pinIndex);
-
-    });
-
-    if(p.type!=="GND" && connectedPins.size===0){
-
-      messages.push(
-        `<div class="error">${p.type} is not connected.</div>`
-      );
-
-      errors++;
-    }
-  });
-
-  if(parts.some(p=>p.type==="LED")){
-
-    const hasR=parts.some(p=>p.type==="Resistor");
-
-    if(!hasR){
-
-      messages.push(
-        '<div class="warning">LED detected without a resistor. A current-limiting resistor is normally required.</div>'
-      );
-
-      warnings++;
-    }
-  }
-
-  if(errors===0 && warnings===0){
-
-    messages.push(
-      '<div class="ok">✓ No basic configuration errors detected.</div>'
-    );
-  }
-
-  messages.unshift(
-    `<div><b>${errors}</b> errors • <b>${warnings}</b> warnings</div>`
-  );
-
-  document.getElementById("diagnostics").innerHTML=
-    messages.join("");
 }
+
+
+function buildGraph(){
+
+ const parent={};
+
+ function make(x){
+   if(!(x in parent))parent[x]=x;
+ }
+
+ function find(x){
+
+   if(parent[x]!==x){
+     parent[x]=find(parent[x]);
+   }
+
+   return parent[x];
+ }
+
+ function union(a,b){
+
+   make(a);
+   make(b);
+
+   a=find(a);
+   b=find(b);
+
+   if(a!==b)parent[b]=a;
+
+ }
+
+ parts.forEach(p=>{
+
+   p.pins.forEach((_,i)=>{
+     make(pinKey(p.id,i));
+   });
+
+ });
+
+ wires.forEach(w=>{
+
+   union(
+     pinKey(w.a.partId,w.a.pinIndex),
+     pinKey(w.b.partId,w.b.pinIndex)
+   );
+
+ });
+
+ const nets={};
+
+ Object.keys(parent).forEach(k=>{
+
+   const root=find(k);
+
+   if(!nets[root])nets[root]=[];
+
+   nets[root].push(k);
+
+ });
+
+ return{
+   parent,
+   find,
+   nets
+ };
+
+}
+
+
+/* =========================================================
+   FIND CONNECTED PINS
+========================================================= */
+
+function connectedPinKeys(partId,pinIndex,graph){
+
+ const root=graph.find(pinKey(partId,pinIndex));
+
+ return graph.nets[root]||[];
+
+}
+
+
+function getConnectedParts(graph){
+
+ const result=[];
+
+ Object.values(graph.nets).forEach(net=>{
+
+   const set=new Set();
+
+   net.forEach(k=>{
+
+     const id=Number(k.split(":")[0]);
+
+     set.add(id);
+
+   });
+
+   result.push([...set]);
+
+ });
+
+ return result;
+
+}
+
+
+/* =========================================================
+   ELECTRICAL SOLVER
+========================================================= */
+
+function solveCircuit(){
+
+ const graph=buildGraph();
+
+ const result={
+
+   valid:true,
+   errors:[],
+   warnings:[],
+   logs:[],
+   voltage:null,
+   current:null,
+   power:null,
+   state:"IDLE"
+
+ };
+
+
+ if(parts.length===0){
+
+   result.errors.push("No components.");
+
+   result.state="ERROR";
+
+   return result;
+
+ }
+
+
+ const supplies=parts.filter(p=>
+   p.type==="5V Supply"||
+   p.type==="12V Supply"
+ );
+
+ const grounds=parts.filter(p=>
+   p.type==="GND"
+ );
+
+
+ if(supplies.length===0){
+
+   result.errors.push(
+     "No power source detected."
+   );
+
+ }
+
+
+ if(grounds.length===0){
+
+   result.errors.push(
+     "No GND reference detected."
+   );
+
+ }
+
+
+ if(result.errors.length){
+
+   result.state="ERROR";
+
+   return result;
+
+ }
+
+
+ /* -----------------------------------------
+    SUPPLY ANALYSIS
+ ----------------------------------------- */
+
+ let supply=0;
+ let sourcePart=null;
+
+ supplies.forEach(s=>{
+
+   const model=models[s.type];
+
+   if(model&&model.voltage> supply){
+
+     supply=model.voltage;
+     sourcePart=s;
+
+   }
+
+ });
+
+
+ result.voltage=supply;
+
+ result.logs.push(
+   `Power source: ${sourcePart.type} = ${supply}V`
+ );
+
+
+ /* -----------------------------------------
+    CHECK SHORT TO GND
+ ----------------------------------------- */
+
+ for(const s of supplies){
+
+   const positiveNet=connectedPinKeys(
+     s.id,0,graph
+   );
+
+   const negativeNet=connectedPinKeys(
+     s.id,1,graph
+   );
+
+   const positiveSet=new Set(positiveNet);
+
+   const directShort=negativeNet.some(k=>
+     positiveSet.has(k)
+   );
+
+   if(directShort){
+
+     result.errors.push(
+       `${s.type}: V+ is directly connected to GND. SHORT CIRCUIT.`
+     );
+
+   }
+
+ }
+
+
+ /* -----------------------------------------
+    FIND RESISTORS
+ ----------------------------------------- */
+
+ const resistors=parts.filter(p=>
+   p.type==="Resistor"
+ );
+
+
+ /* -----------------------------------------
+    LED CIRCUIT ANALYSIS
+ ----------------------------------------- */
+
+ const leds=parts.filter(p=>
+   p.type==="LED"
+ );
+
+
+ if(leds.length){
+
+   if(resistors.length===0){
+
+     result.warnings.push(
+       "LED detected without current-limiting resistor."
+     );
+
+   }
+
+
+   leds.forEach(led=>{
+
+     const aNet=connectedPinKeys(
+       led.id,0,graph
+     );
+
+     const kNet=connectedPinKeys(
+       led.id,1,graph
+     );
+
+     const aSet=new Set(aNet);
+
+     const kSet=new Set(kNet);
+
+
+     const resistorPath=resistors.find(r=>{
+
+       const rIn=connectedPinKeys(
+         r.id,0,graph
+       );
+
+       const rOut=connectedPinKeys(
+         r.id,1,graph
+       );
+
+       const inA=rIn.some(x=>aSet.has(x));
+       const outK=rOut.some(x=>kSet.has(x));
+
+       const inK=rIn.some(x=>kSet.has(x));
+       const outA=rOut.some(x=>aSet.has(x));
+
+       return(inA&&outK)||(inK&&outA);
+
+     });
+
+
+     if(resistorPath){
+
+       const R=models.Resistor.resistance;
+
+       const Vf=models.LED.forwardVoltage;
+
+       const I=(supply-Vf)/R;
+
+       const P=I*I*R;
+
+       result.current=I;
+
+       result.power=P;
+
+       result.voltage=supply;
+
+
+       result.logs.push(
+         `LED circuit: (${supply}V - ${Vf}V) / ${R}Ω = ${(I*1000).toFixed(2)}mA`
+       );
+
+
+       if(I<=0){
+
+         result.warnings.push(
+           "LED current is zero or negative."
+         );
+
+       }
+       else if(I>models.LED.maxCurrent){
+
+         result.errors.push(
+           `LED overcurrent: ${(I*1000).toFixed(2)}mA > 20mA`
+         );
+
+       }
+       else{
+
+         result.logs.push(
+           `LED current is safe: ${(I*1000).toFixed(2)}mA`
+         );
+
+       }
+
+
+       if(P>models.Resistor.powerRating){
+
+         result.errors.push(
+           `Resistor power ${(P).toFixed(3)}W exceeds 0.25W rating.`
+         );
+
+       }
+       else{
+
+         result.logs.push(
+           `Resistor power: ${P.toFixed(3)}W`
+         );
+
+       }
+
+
+     }
+     else{
+
+       result.warnings.push(
+         `LED #${led.id}: no resistor path detected.`
+       );
+
+     }
+
+   });
+
+ }
+
+
+ /* -----------------------------------------
+    SIMPLE RESISTOR CIRCUIT
+ ----------------------------------------- */
+
+ if(
+   !leds.length &&
+   resistors.length &&
+   supply
+ ){
+
+   const r=resistors[0];
+
+   const I=supply/models.Resistor.resistance;
+
+   const P=I*I*models.Resistor.resistance;
+
+   result.current=I;
+
+   result.power=P;
+
+   result.logs.push(
+     `Resistor current: ${(I*1000).toFixed(2)}mA`
+   );
+
+   result.logs.push(
+     `Resistor power: ${P.toFixed(3)}W`
+   );
+
+   if(P>models.Resistor.powerRating){
+
+     result.errors.push(
+       `Resistor overload: ${P.toFixed(3)}W > 0.25W`
+     );
+
+   }
+
+ }
+
+
+ /* -----------------------------------------
+    FLOATING COMPONENTS
+ ----------------------------------------- */
+
+ parts.forEach(p=>{
+
+   if(
+     p.type==="GND"||
+     p.type==="5V Supply"||
+     p.type==="12V Supply"
+   )return;
+
+   let connected=0;
+
+   p.pins.forEach((_,i)=>{
+
+     const net=connectedPinKeys(
+       p.id,i,graph
+     );
+
+     if(net.length>1)connected++;
+
+   });
+
+
+   if(connected===0){
+
+     result.warnings.push(
+       `${p.type} #${p.id} is electrically floating.`
+     );
+
+   }
+
+ });
+
+
+ /* -----------------------------------------
+    BUCK CONVERTER
+ ----------------------------------------- */
+
+ parts.filter(p=>p.type==="Buck Converter")
+ .forEach(buck=>{
+
+   const inputConnected=
+     connectedPinKeys(buck.id,0,graph).length>1;
+
+   const inputGround=
+     connectedPinKeys(buck.id,1,graph).length>1;
+
+   const outputConnected=
+     connectedPinKeys(buck.id,2,graph).length>1;
+
+   const outputGround=
+     connectedPinKeys(buck.id,3,graph).length>1;
+
+
+   if(!inputConnected||!inputGround){
+
+     result.warnings.push(
+       "Buck Converter input is incomplete."
+     );
+
+   }
+
+   if(!outputConnected||!outputGround){
+
+     result.warnings.push(
+       "Buck Converter output is incomplete."
+     );
+
+   }
+
+   if(supply>24){
+
+     result.errors.push(
+       "Buck Converter input exceeds 24V."
+     );
+
+   }
+
+ });
+
+
+ /* -----------------------------------------
+    FINAL STATE
+ ----------------------------------------- */
+
+ if(result.errors.length){
+
+   result.state="ERROR";
+
+ }
+ else if(result.warnings.length){
+
+   result.state="WARNING";
+
+ }
+ else{
+
+   result.state="SAFE";
+
+ }
+
+
+ return result;
+
+}
+
+
+/* =========================================================
+   SIMULATION UI
+========================================================= */
 
 function simulate(){
 
-  let output=[];
+ const result=solveCircuit();
 
-  const hasSupply=parts.some(p=>
-    p.type==="5V Supply" || p.type==="12V Supply"
-  );
+ document.getElementById("diagnostics").innerHTML="";
 
-  const hasLED=parts.some(p=>
-    p.type==="LED" || p.type==="RGB LED"
-  );
+ let html="";
 
-  const hasResistor=parts.some(p=>
-    p.type==="Resistor"
-  );
+ result.errors.forEach(e=>{
+   html+=`<div class="error">✕ ${e}</div>`;
+ });
 
-  if(!hasSupply){
+ result.warnings.forEach(w=>{
+   html+=`<div class="warning">⚠ ${w}</div>`;
+ });
 
-    output.push(
-      '<div class="error">Simulation stopped: no power supply.</div>'
-    );
+ if(!html){
 
-  }else if(hasLED && !hasResistor){
+   html=
+   '<div class="ok">✓ No electrical errors detected.</div>';
 
-    output.push(
-      '<div class="warning">Power detected, but LED protection resistor is missing.</div>'
-    );
+ }
 
-  }else if(hasLED && hasResistor && wires.length>0){
+ document.getElementById("diagnostics").innerHTML=html;
 
-    output.push(
-      '<div class="ok">✓ Circuit has a power source, LED and resistor.</div>'
-    );
+ document.getElementById("voltageValue").textContent=
+   result.voltage!==null?
+   result.voltage.toFixed(2)+" V":"—";
 
-    output.push(
-      '<div class="ok">Estimated state: LED may be ON if the wiring path is electrically complete.</div>'
-    );
+ document.getElementById("currentValue").textContent=
+   result.current!==null?
+   (result.current*1000).toFixed(2)+" mA":"—";
 
-  }else{
+ document.getElementById("powerValue").textContent=
+   result.power!==null?
+   result.power.toFixed(3)+" W":"—";
 
-    output.push(
-      '<div class="warning">Circuit is incomplete.</div>'
-    );
-  }
+ document.getElementById("stateValue").textContent=
+   result.state;
 
-  document.getElementById("diagnostics").innerHTML=
-    output.join("");
+
+ let engineClass="info";
+
+ if(result.state==="SAFE")engineClass="ok";
+ if(result.state==="WARNING")engineClass="warning";
+ if(result.state==="ERROR")engineClass="error";
+
+
+ document.getElementById("engine").innerHTML=
+   `<span class="${engineClass}">
+      Electrical state: <b>${result.state}</b>
+    </span>`;
+
+
+ document.getElementById("log").innerHTML=
+   result.logs.length?
+   result.logs.map(x=>`<div>${x}</div>`).join(""):
+   "<div>No electrical calculations performed.</div>";
+
+
+ setStatus(
+   result.state==="SAFE"?
+   "✓ Simulation completed successfully.":
+   result.state==="WARNING"?
+   "⚠ Simulation completed with warnings.":
+   "✕ Simulation detected an electrical error."
+ );
+
 }
+
+
+/* =========================================================
+   DIAGNOSTICS
+========================================================= */
+
+function diagnose(){
+
+ const result=solveCircuit();
+
+ let html=`
+ <div>
+   <b>${result.errors.length}</b> errors •
+   <b>${result.warnings.length}</b> warnings
+ </div>
+ `;
+
+
+ result.errors.forEach(e=>{
+   html+=`<div class="error" style="margin-top:7px">✕ ${e}</div>`;
+ });
+
+
+ result.warnings.forEach(w=>{
+   html+=`<div class="warning" style="margin-top:7px">⚠ ${w}</div>`;
+ });
+
+
+ if(
+   result.errors.length===0 &&
+   result.warnings.length===0
+ ){
+
+   html+=`
+   <div class="ok" style="margin-top:8px">
+   ✓ Circuit passed the current V3 electrical checks.
+   </div>`;
+ }
+
+
+ document.getElementById("diagnostics").innerHTML=html;
+
+ setStatus(
+   `Diagnostics complete: ${result.errors.length} errors, ${result.warnings.length} warnings.`
+ );
+
+}
+
+
+/* =========================================================
+   CIRCUIT INSPECTOR
+========================================================= */
+
+function inspectCircuit(){
+
+ const graph=buildGraph();
+
+ let html="";
+
+ Object.entries(graph.nets).forEach(
+   ([net,pins],index)=>{
+
+     html+=`
+     <div class="item">
+       <b>Net ${index+1}</b><br>
+       ${pins.map(k=>{
+         const [id,pin]=k.split(":");
+         const part=parts.find(p=>p.id==id);
+         return part?
+         `${part.type} #${id} → ${part.pins[pin].name}`:
+         k;
+       }).join("<br>")}
+     </div>
+     `;
+
+   }
+ );
+
+
+ document.getElementById("engine").innerHTML=
+   html||"No electrical nets.";
+
+ setStatus(
+   `Circuit inspected: ${Object.keys(graph.nets).length} electrical nets found.`
+ );
+
+}
+
+
+/* =========================================================
+   SMARTCAR ONE TEMPLATE
+========================================================= */
+
+function smartCarTemplate(){
+
+ parts=[];
+ wires=[];
+ nextId=1;
+ selectedPin=null;
+
+
+ addPart("12V Supply",80,180);
+ addPart("Fuse",280,180);
+ addPart("Buck Converter",480,150);
+ addPart("ESP32-S3",720,130);
+ addPart("MOSFET",720,330);
+ addPart("RGB LED",980,300);
+ addPart("GND",480,430);
+
+
+ /*
+    We deliberately leave the wires visible as a
+    manual engineering exercise instead of pretending
+    that the circuit is automatically connected.
+ */
+
+
+ setStatus(
+   `<b>SmartCar ONE V3 template loaded.</b><br>
+    Connect 12V → Fuse → Buck → ESP32 → MOSFET → RGB LED.
+    Connect all required grounds.`
+ );
+
+ updateInfo();
+ render();
+
+}
+
+
+/* =========================================================
+   STARTER LED CIRCUIT
+========================================================= */
+
+function starterCircuit(){
+
+ parts=[];
+ wires=[];
+ nextId=1;
+ selectedPin=null;
+
+
+ const s={id:nextId++,type:"5V Supply",x:80,y:180,
+   pins:pinMap["5V Supply"].map(name=>({name}))};
+
+ const r={id:nextId++,type:"Resistor",x:350,y:180,
+   pins:pinMap["Resistor"].map(name=>({name}))};
+
+ const led={id:nextId++,type:"LED",x:600,y:180,
+   pins:pinMap["LED"].map(name=>({name}))};
+
+ const g={id:nextId++,type:"GND",x:850,y:300,
+   pins:pinMap["GND"].map(name=>({name}))};
+
+
+ parts.push(s,r,led,g);
+
+ render();
+ updateInfo();
+
+ setStatus(
+   "LED test circuit loaded. Connect V+ → resistor → LED → GND."
+ );
+
+}
+
+
+/* =========================================================
+   SAVE / LOAD
+========================================================= */
 
 function saveProject(){
 
-  const data={
-    parts,
-    wires,
-    nextId
-  };
+ const data={
+   version:3,
+   parts,
+   wires,
+   nextId
+ };
 
-  localStorage.setItem(
-    "AI_VIRTUAL_WORKSHOP_V2",
-    JSON.stringify(data)
-  );
+ localStorage.setItem(
+   "AI_VIRTUAL_WORKSHOP_V3",
+   JSON.stringify(data)
+ );
 
-  document.getElementById("status").innerHTML=
-    '<span class="ok">✓ Project saved on this device.</span>';
+ setStatus(
+   '<span class="ok">✓ V3 project saved on this device.</span>'
+ );
+
 }
+
 
 function loadProject(){
 
-  const raw=localStorage.getItem(
-    "AI_VIRTUAL_WORKSHOP_V2"
-  );
+ const raw=localStorage.getItem(
+   "AI_VIRTUAL_WORKSHOP_V3"
+ );
 
-  if(!raw){
+ if(!raw){
 
-    document.getElementById("status").textContent=
-      "No saved project found.";
+   setStatus("No saved V3 project found.");
 
-    return;
-  }
+   return;
 
-  const data=JSON.parse(raw);
+ }
 
-  parts=data.parts||[];
-  wires=data.wires||[];
-  nextId=data.nextId||1;
+ try{
 
-  selectedPin=null;
+   const data=JSON.parse(raw);
 
-  render();
-  updateInfo();
+   parts=data.parts||[];
+   wires=data.wires||[];
+   nextId=data.nextId||1;
 
-  document.getElementById("status").innerHTML=
-    '<span class="ok">✓ Project loaded.</span>';
+   selectedPin=null;
+
+   render();
+   updateInfo();
+
+   setStatus(
+     '<span class="ok">✓ V3 project loaded.</span>'
+   );
+
+ }
+ catch(e){
+
+   setStatus(
+     '<span class="error">Could not load project.</span>'
+   );
+
+ }
+
 }
+
+
+/* =========================================================
+   CLEAR
+========================================================= */
 
 function clearBoard(){
 
-  if(!confirm("Delete all components and wires?"))return;
+ if(!confirm(
+   "Delete all components and wires?"
+ ))return;
 
-  parts=[];
-  wires=[];
-  selectedPin=null;
+ parts=[];
+ wires=[];
+ selectedPin=null;
+ nextId=1;
 
-  render();
-  updateInfo();
+ render();
+ updateInfo();
 
-  document.getElementById("diagnostics").textContent=
-    "Board cleared.";
+ document.getElementById("diagnostics").textContent=
+   "Board cleared.";
 
-  document.getElementById("status").textContent=
-    "Select a pin to start wiring.";
+ document.getElementById("engine").textContent=
+   "Electrical engine ready.";
+
+ document.getElementById("log").textContent=
+   "No simulation executed.";
+
+ document.getElementById("voltageValue").textContent="—";
+ document.getElementById("currentValue").textContent="—";
+ document.getElementById("powerValue").textContent="—";
+ document.getElementById("stateValue").textContent="IDLE";
+
+ setStatus(
+   "Select a pin to start wiring."
+ );
+
 }
 
-/* Starter example */
-addPart("5V Supply",100,100);
-addPart("Resistor",350,150);
-addPart("LED",600,200);
-addPart("GND",600,350);
+
+/* =========================================================
+   UI HELPERS
+========================================================= */
+
+function setStatus(text){
+
+ document.getElementById("status").innerHTML=text;
+
+}
+
+
+function highlightPin(partId,pinIndex){
+
+ document.querySelectorAll(".pin").forEach(p=>{
+   p.style.boxShadow="";
+ });
+
+ const el=document.querySelector(
+   `[data-id="${partId}"]`
+ );
+
+ if(!el)return;
+
+ const pin=el.querySelectorAll(".pin")[pinIndex];
+
+ if(pin){
+
+   pin.style.boxShadow=
+     "0 0 0 4px rgba(114,183,255,.35)";
+
+ }
+
+}
+
+
+/* =========================================================
+   INITIAL BOARD
+========================================================= */
+
+starterCircuit();
 
 </script>
 
