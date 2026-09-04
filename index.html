@@ -2,1045 +2,746 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>AI Virtual Workshop V1</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Virtual Workshop V2</title>
 
 <style>
 *{box-sizing:border-box}
 body{
- margin:0;
- background:#07111f;
- color:#e8eef7;
- font-family:Arial,sans-serif;
- overflow:hidden
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:#0b1020;
+  color:#eef2ff;
 }
-button{
- border:0;
- border-radius:10px;
- padding:10px 13px;
- background:#17263a;
- color:#fff;
- font-weight:600
+header{
+  padding:14px 18px;
+  background:#11182d;
+  border-bottom:1px solid #26304d;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
 }
-button:active{transform:scale(.97)}
-.app{height:100vh;display:flex;flex-direction:column}
-.header{
- height:58px;
- display:flex;
- align-items:center;
- justify-content:space-between;
- padding:0 12px;
- background:#0c1828;
- border-bottom:1px solid #20334b
+.logo{font-weight:bold;font-size:18px}
+.badge{
+  font-size:12px;
+  background:#1d2948;
+  padding:6px 9px;
+  border-radius:8px;
 }
-.logo{font-size:17px;font-weight:800}
-.logo span{color:#50d890}
-.main{flex:1;display:flex;min-height:0}
-.sidebar{
- width:220px;
- background:#0b1727;
- border-right:1px solid #20334b;
- padding:12px;
- overflow:auto
+.app{
+  display:grid;
+  grid-template-columns:230px 1fr 280px;
+  height:calc(100vh - 61px);
 }
-.sidebar h3{font-size:13px;margin:8px 0;color:#8fa4bc}
-.parts{display:grid;gap:8px}
-.part{
- background:#122237;
- border:1px solid #233b57;
- border-radius:10px;
- padding:11px;
- cursor:pointer;
- font-size:13px
-}
-.part b{display:block;color:#fff}
-.part small{color:#8196ad}
-.workspace{
- position:relative;
- flex:1;
- overflow:hidden;
- background:
- radial-gradient(circle at 20% 20%,#10243b 0 1px,transparent 1px),
- #081321;
- background-size:25px 25px
-}
-.grid{
- position:absolute;
- inset:0;
- background-image:
- linear-gradient(#122338 1px,transparent 1px),
- linear-gradient(90deg,#122338 1px,transparent 1px);
- background-size:25px 25px;
- opacity:.35
-}
-.toolbar{
- position:absolute;
- z-index:20;
- top:10px;
- left:10px;
- right:10px;
- display:flex;
- gap:7px;
- overflow:auto
-}
-.toolbar button{white-space:nowrap}
-.board{
- position:absolute;
- width:1600px;
- height:1000px;
- left:0;
- top:0
-}
-.wire{
- position:absolute;
- height:3px;
- background:#4edb9a;
- transform-origin:left center;
- z-index:2;
- pointer-events:none;
- box-shadow:0 0 7px #4edb9a
-}
-.component{
- position:absolute;
- min-width:125px;
- background:#102238;
- border:1px solid #31506f;
- border-radius:12px;
- padding:10px;
- z-index:5;
- box-shadow:0 8px 25px #0007;
- user-select:none;
- touch-action:none
-}
-.component.selected{border-color:#5de4a4;box-shadow:0 0 0 2px #5de4a422}
-.comp-title{font-size:13px;font-weight:800;margin-bottom:8px}
-.pin{
- display:flex;
- align-items:center;
- gap:6px;
- margin:5px 0;
- font-size:10px;
- color:#b8c8d9;
- cursor:pointer
-}
-.pin-dot{
- width:12px;
- height:12px;
- border-radius:50%;
- background:#60748a;
- border:2px solid #a8bed2
-}
-.pin-dot.power{background:#efc45b}
-.pin-dot.gnd{background:#8190a1}
-.pin-dot.signal{background:#65a8ff}
 .panel{
- width:310px;
- background:#0b1727;
- border-left:1px solid #20334b;
- padding:12px;
- overflow:auto
+  background:#10172a;
+  padding:14px;
+  overflow:auto;
+  border-right:1px solid #26304d;
 }
-.card{
- background:#102035;
- border:1px solid #223b57;
- border-radius:12px;
- padding:12px;
- margin-bottom:10px
+.right{border-left:1px solid #26304d;border-right:0}
+h3{margin:4px 0 12px;font-size:14px}
+.component{
+  background:#18213a;
+  border:1px solid #2c3858;
+  padding:10px;
+  margin-bottom:8px;
+  border-radius:9px;
+  cursor:pointer;
+  user-select:none;
 }
-.card h3{margin:0 0 9px;font-size:14px}
+.component:hover{background:#202c49}
+.component small{display:block;color:#9aa8c7;margin-top:3px}
+button{
+  border:0;
+  border-radius:8px;
+  padding:10px 12px;
+  margin:4px 0;
+  cursor:pointer;
+  background:#263557;
+  color:white;
+  width:100%;
+}
+button:hover{filter:brightness(1.15)}
+.primary{background:#315fd4}
+.danger{background:#a83d4a}
+.success{background:#287c59}
+
+#workspace{
+  position:relative;
+  overflow:hidden;
+  background:
+    linear-gradient(#18213a 1px,transparent 1px),
+    linear-gradient(90deg,#18213a 1px,transparent 1px);
+  background-size:25px 25px;
+}
+#board{
+  position:absolute;
+  inset:0;
+}
+.part{
+  position:absolute;
+  width:150px;
+  min-height:75px;
+  background:#18233d;
+  border:2px solid #53658e;
+  border-radius:10px;
+  padding:10px;
+  cursor:move;
+  z-index:5;
+  box-shadow:0 8px 20px #0005;
+}
+.part.selected{border-color:#7fa2ff}
+.part-title{font-weight:bold}
+.part-info{font-size:11px;color:#9eacce;margin-top:4px}
+.pin{
+  position:absolute;
+  width:14px;
+  height:14px;
+  border-radius:50%;
+  background:#dce7ff;
+  border:2px solid #4c67a0;
+  cursor:pointer;
+  z-index:8;
+}
+.pin:hover{transform:scale(1.3)}
+.pin.left{left:-8px}
+.pin.right{right:-8px}
+.pin.top{top:-8px}
+.pin.bottom{bottom:-8px}
+.pin-label{
+  position:absolute;
+  font-size:9px;
+  color:#c8d2ea;
+  white-space:nowrap;
+}
+.left .pin-label{left:12px;top:-3px}
+.right .pin-label{right:12px;top:-3px}
+
+svg{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  pointer-events:none;
+  z-index:3;
+}
+wire{
+  stroke:#58d68d;
+  stroke-width:4;
+  fill:none;
+}
+.wire-line{
+  stroke:#58d68d;
+  stroke-width:4;
+  fill:none;
+  pointer-events:stroke;
+  cursor:pointer;
+}
+
 .status{
- padding:9px;
- border-radius:9px;
- background:#172b3d;
- font-size:12px;
- margin:5px 0
+  background:#151f36;
+  border:1px solid #293653;
+  border-radius:9px;
+  padding:10px;
+  margin-bottom:10px;
+  font-size:12px;
 }
-.ok{border-left:4px solid #50d890}
-.warn{border-left:4px solid #f3c969}
-.err{border-left:4px solid #ff6969}
-.metric{
- display:flex;
- justify-content:space-between;
- padding:5px 0;
- font-size:12px;
- color:#b9c8d8
+.item{
+  padding:7px 0;
+  border-bottom:1px solid #25304a;
+  font-size:12px;
 }
-.bottom{
- display:none;
- position:absolute;
- bottom:0;
- left:0;
- right:0;
- height:62px;
- background:#0b1727;
- border-top:1px solid #20334b;
- z-index:50;
- grid-template-columns:repeat(4,1fr)
+.ok{color:#6fe3a3}
+.error{color:#ff7777}
+.warning{color:#ffd166}
+
+.stat{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:6px;
+  margin-bottom:12px;
 }
-.bottom button{background:none;border-radius:0;font-size:11px}
-@media(max-width:800px){
- .sidebar{display:none}
- .panel{display:none}
- .bottom{display:grid}
- .header{height:52px}
- .logo{font-size:14px}
- .workspace{width:100%}
+.stat div{
+  background:#18213a;
+  padding:8px;
+  border-radius:7px;
+  font-size:11px;
 }
-.modal{
- position:fixed;
- inset:0;
- background:#0009;
- display:none;
- align-items:center;
- justify-content:center;
- z-index:100
-}
-.modal.show{display:flex}
-.modalbox{
- width:min(92%,500px);
- max-height:85vh;
- overflow:auto;
- background:#0c1a2b;
- border:1px solid #2b4663;
- border-radius:16px;
- padding:18px
-}
-.modalbox h2{margin-top:0}
-textarea{
- width:100%;
- min-height:100px;
- background:#071321;
- color:#fff;
- border:1px solid #29425e;
- border-radius:10px;
- padding:10px
+.stat b{display:block;font-size:15px;margin-top:3px}
+
+@media(max-width:900px){
+  .app{grid-template-columns:1fr;height:auto}
+  .panel{border:0;border-bottom:1px solid #26304d}
+  .right{border:0}
+  #workspace{height:65vh}
 }
 </style>
 </head>
 
 <body>
-<div class="app">
 
-<header class="header">
- <div class="logo">AI <span>VIRTUAL WORKSHOP</span> V1</div>
- <div>
-  <button onclick="newProject()">New</button>
-  <button onclick="saveProject()">Save</button>
- </div>
+<header>
+  <div class="logo">AI VIRTUAL WORKSHOP</div>
+  <div class="badge">V2 • Interactive Electronics Lab</div>
 </header>
 
-<div class="main">
+<div class="app">
 
-<aside class="sidebar">
- <h3>COMPONENT LIBRARY</h3>
-
- <div class="parts">
-
-  <div class="part" onclick="addComponent('ESP32-S3')">
-   <b>ESP32-S3</b><small>3V3 / GND / GPIO</small>
-  </div>
-
-  <div class="part" onclick="addComponent('5V Supply')">
-   <b>5V Supply</b><small>+5V / GND</small>
-  </div>
-
-  <div class="part" onclick="addComponent('12V Supply')">
-   <b>12V Supply</b><small>+12V / GND</small>
-  </div>
-
-  <div class="part" onclick="addComponent('Buck Converter')">
-   <b>Buck Converter</b><small>12V → 5V</small>
-  </div>
-
-  <div class="part" onclick="addComponent('Resistor')">
-   <b>Resistor</b><small>220Ω</small>
-  </div>
-
-  <div class="part" onclick="addComponent('LED')">
-   <b>LED</b><small>Vf ≈ 2V</small>
-  </div>
-
-  <div class="part" onclick="addComponent('RGB LED')">
-   <b>RGB LED</b><small>R / G / B / GND</small>
-  </div>
-
-  <div class="part" onclick="addComponent('MOSFET')">
-   <b>MOSFET</b><small>G / D / S</small>
-  </div>
-
-  <div class="part" onclick="addComponent('Fuse')">
-   <b>Fuse</b><small>5A</small>
-  </div>
-
-  <div class="part" onclick="addComponent('Switch')">
-   <b>Switch</b><small>ON / OFF</small>
-  </div>
-
-  <div class="part" onclick="addComponent('Capacitor')">
-   <b>Capacitor</b><small>100µF</small>
-  </div>
-
-  <div class="part" onclick="addComponent('GND')">
-   <b>GND</b><small>Ground reference</small>
-  </div>
-
- </div>
-
- <div class="card" style="margin-top:15px">
-  <h3>SmartCar ONE</h3>
-  <button onclick="loadSmartCar()" style="width:100%">
-   Load V1 Template
-  </button>
- </div>
-
-</aside>
-
-<section class="workspace" id="workspace">
-
- <div class="grid"></div>
-
- <div class="toolbar">
-  <button onclick="runSimulation()">▶ Simulate</button>
-  <button onclick="diagnose()">AI Diagnose</button>
-  <button onclick="showBOM()">BOM</button>
-  <button onclick="clearBoard()">Clear</button>
-  <button onclick="zoomIn()">+</button>
-  <button onclick="zoomOut()">−</button>
- </div>
-
- <div class="board" id="board"></div>
-
-</section>
-
+<!-- LEFT -->
 <aside class="panel">
+<h3>COMPONENTS</h3>
 
- <div class="card">
-  <h3>Simulation</h3>
+<div class="component" onclick="addPart('ESP32-S3')">
+ESP32-S3
+<small>Microcontroller</small>
+</div>
 
-  <div class="status" id="simulationStatus">
-   Ready — add components and connect them.
-  </div>
+<div class="component" onclick="addPart('5V Supply')">
+5V Supply
+<small>Power source</small>
+</div>
 
-  <div class="metric">
-   <span>Voltage</span>
-   <b id="voltage">—</b>
-  </div>
+<div class="component" onclick="addPart('12V Supply')">
+12V Supply
+<small>Power source</small>
+</div>
 
-  <div class="metric">
-   <span>Current</span>
-   <b id="current">—</b>
-  </div>
- </div>
+<div class="component" onclick="addPart('Resistor')">
+Resistor
+<small>220Ω</small>
+</div>
 
- <div class="card">
-  <h3>AI Engineer</h3>
+<div class="component" onclick="addPart('LED')">
+LED
+<small>5mm LED</small>
+</div>
 
-  <div id="aiOutput" class="status">
-   I am ready to inspect your circuit.
-  </div>
+<div class="component" onclick="addPart('RGB LED')">
+RGB LED
+<small>3 channel</small>
+</div>
 
-  <button onclick="diagnose()" style="width:100%">
-   Analyze Circuit
-  </button>
- </div>
+<div class="component" onclick="addPart('Switch')">
+Switch
+<small>SPST</small>
+</div>
 
- <div class="card">
-  <h3>Project</h3>
+<div class="component" onclick="addPart('MOSFET')">
+MOSFET
+<small>N-channel</small>
+</div>
 
-  <div class="metric">
-   <span>Components</span>
-   <b id="componentCount">0</b>
-  </div>
+<div class="component" onclick="addPart('Fuse')">
+Fuse
+<small>5A</small>
+</div>
 
-  <div class="metric">
-   <span>Connections</span>
-   <b id="connectionCount">0</b>
-  </div>
+<div class="component" onclick="addPart('Buck Converter')">
+Buck Converter
+<small>12V → 5V</small>
+</div>
 
-  <div class="metric">
-   <span>Errors</span>
-   <b id="errorCount">0</b>
-  </div>
- </div>
+<div class="component" onclick="addPart('GND')">
+GND
+<small>Ground</small>
+</div>
+
+<h3 style="margin-top:18px">TOOLS</h3>
+
+<button class="primary" onclick="diagnose()">Run Diagnostics</button>
+<button class="success" onclick="simulate()">Run Simulation</button>
+<button onclick="saveProject()">Save Project</button>
+<button onclick="loadProject()">Load Project</button>
+<button class="danger" onclick="clearBoard()">Clear Board</button>
 
 </aside>
 
+<!-- WORKSPACE -->
+<main id="workspace">
+  <div id="board"></div>
+  <svg id="wires"></svg>
+</main>
+
+<!-- RIGHT -->
+<aside class="panel right">
+
+<h3>SYSTEM STATUS</h3>
+
+<div class="stat">
+<div>Parts<b id="partCount">0</b></div>
+<div>Wires<b id="wireCount">0</b></div>
 </div>
 
-<nav class="bottom">
- <button onclick="showLibrary()">Components</button>
- <button onclick="runSimulation()">Simulate</button>
- <button onclick="diagnose()">AI</button>
- <button onclick="showBOM()">BOM</button>
-</nav>
-
+<div id="status" class="status">
+Select a pin to start wiring.
 </div>
 
-<div class="modal" id="modal">
- <div class="modalbox" id="modalContent"></div>
+<h3>DIAGNOSTICS</h3>
+<div id="diagnostics" class="status">
+No diagnostics run.
+</div>
+
+<h3>BILL OF MATERIALS</h3>
+<div id="bom" class="status">
+No components.
+</div>
+
+</aside>
+
 </div>
 
 <script>
-let components=[];
-let connections=[];
+
+let parts=[];
+let wires=[];
+let nextId=1;
 let selectedPin=null;
-let idCounter=1;
-let zoom=1;
+let dragging=null;
+let dragOffset={x:0,y:0};
 
-const definitions={
+const board=document.getElementById("board");
+const workspace=document.getElementById("workspace");
+const svg=document.getElementById("wires");
 
- "ESP32-S3":{
-  pins:[
-   ["3V3","power"],
-   ["GND","gnd"],
-   ["GPIO2","signal"],
-   ["GPIO4","signal"]
-  ]
- },
-
- "5V Supply":{
-  pins:[
-   ["+5V","power"],
-   ["GND","gnd"]
-  ]
- },
-
- "12V Supply":{
-  pins:[
-   ["+12V","power"],
-   ["GND","gnd"]
-  ]
- },
-
- "Buck Converter":{
-  pins:[
-   ["VIN+","power"],
-   ["VIN-","gnd"],
-   ["VOUT+","power"],
-   ["VOUT-","gnd"]
-  ]
- },
-
- "Resistor":{
-  pins:[
-   ["A","signal"],
-   ["B","signal"]
-  ]
- },
-
- "LED":{
-  pins:[
-   ["A","signal"],
-   ["K","gnd"]
-  ]
- },
-
- "RGB LED":{
-  pins:[
-   ["R","signal"],
-   ["G","signal"],
-   ["B","signal"],
-   ["GND","gnd"]
-  ]
- },
-
- "MOSFET":{
-  pins:[
-   ["G","signal"],
-   ["D","power"],
-   ["S","gnd"]
-  ]
- },
-
- "Fuse":{
-  pins:[
-   ["A","power"],
-   ["B","power"]
-  ]
- },
-
- "Switch":{
-  pins:[
-   ["A","power"],
-   ["B","power"]
-  ]
- },
-
- "Capacitor":{
-  pins:[
-   ["+","power"],
-   ["-","gnd"]
-  ]
- },
-
- "GND":{
-  pins:[
-   ["GND","gnd"]
-  ]
- }
-
+const pinMap={
+ "ESP32-S3":["3V3","GND","GPIO1","GPIO2"],
+ "5V Supply":["V+","GND"],
+ "12V Supply":["V+","GND"],
+ "Resistor":["IN","OUT"],
+ "LED":["A","K"],
+ "RGB LED":["R","G","B","GND"],
+ "Switch":["IN","OUT"],
+ "MOSFET":["G","D","S"],
+ "Fuse":["IN","OUT"],
+ "Buck Converter":["VIN+","VIN-","VOUT+","VOUT-"],
+ "GND":["GND"]
 };
 
-function addComponent(type,x=100+Math.random()*500,y=150+Math.random()*400){
+function addPart(type,x=100+Math.random()*250,y=80+Math.random()*250){
 
- const def=definitions[type];
+  const part={
+    id:nextId++,
+    type,
+    x,
+    y,
+    pins:pinMap[type].map(name=>({name}))
+  };
 
- if(!def)return;
-
- const c={
-  id:"C"+idCounter++,
-  type,
-  x,
-  y
- };
-
- components.push(c);
-
- render();
-
+  parts.push(part);
+  render();
+  updateInfo();
 }
 
 function render(){
 
- const board=document.getElementById("board");
+  board.innerHTML="";
 
- board.querySelectorAll(".component").forEach(e=>e.remove());
+  parts.forEach(part=>{
 
- board.querySelectorAll(".wire").forEach(e=>e.remove());
+    const el=document.createElement("div");
+    el.className="part";
+    el.dataset.id=part.id;
+    el.style.left=part.x+"px";
+    el.style.top=part.y+"px";
 
- components.forEach(c=>{
+    el.innerHTML=`
+      <div class="part-title">${part.type}</div>
+      <div class="part-info">ID: ${part.id}</div>
+    `;
 
-  const el=document.createElement("div");
+    part.pins.forEach((p,index)=>{
 
-  el.className="component";
+      const pin=document.createElement("div");
+      pin.className="pin";
 
-  el.dataset.id=c.id;
+      let position="left";
 
-  el.style.left=c.x+"px";
-  el.style.top=c.y+"px";
+      if(part.type==="RGB LED"){
+        position=index<3?"right":"left";
+      }
+      else if(part.type==="Buck Converter"){
+        position=index<2?"left":"right";
+      }
+      else if(part.pins.length>2){
+        position=index%2===0?"left":"right";
+      }
+      else{
+        position=index===0?"left":"right";
+      }
 
-  el.innerHTML=
-   `<div class="comp-title">${c.type}</div>`+
-   definitions[c.type].pins.map(p=>`
-    <div class="pin"
-         data-comp="${c.id}"
-         data-pin="${p[0]}"
-         onclick="pinClick(event,'${c.id}','${p[0]}')">
-      <span class="pin-dot ${p[1]}"></span>
-      ${p[0]}
-    </div>
-   `).join("");
+      pin.classList.add(position);
+      pin.style.top=(35+index*22)+"px";
 
-  board.appendChild(el);
+      pin.title=p.name;
 
-  makeDraggable(el,c);
+      const label=document.createElement("span");
+      label.className="pin-label";
+      label.textContent=p.name;
 
- });
+      pin.appendChild(label);
 
- drawConnections();
+      pin.onclick=(e)=>{
+        e.stopPropagation();
+        pinClicked(part.id,index);
+      };
 
- document.getElementById("componentCount").textContent=components.length;
+      el.appendChild(pin);
+    });
 
- document.getElementById("connectionCount").textContent=connections.length;
+    el.addEventListener("pointerdown",startDrag);
 
+    board.appendChild(el);
+  });
+
+  drawWires();
 }
 
-function makeDraggable(el,c){
+function startDrag(e){
 
- let sx,sy,ox,oy,drag=false;
+  if(e.target.classList.contains("pin")) return;
 
- el.addEventListener("pointerdown",e=>{
+  const el=e.currentTarget;
+  const id=Number(el.dataset.id);
+  const part=parts.find(p=>p.id===id);
 
-  if(e.target.closest(".pin"))return;
+  dragging=part;
 
-  drag=true;
+  const rect=workspace.getBoundingClientRect();
 
-  sx=e.clientX;
-  sy=e.clientY;
-
-  ox=c.x;
-  oy=c.y;
+  dragOffset.x=e.clientX-rect.left-part.x;
+  dragOffset.y=e.clientY-rect.top-part.y;
 
   el.setPointerCapture(e.pointerId);
 
- });
+  el.onpointermove=(ev)=>{
+    if(!dragging)return;
 
- el.addEventListener("pointermove",e=>{
+    const r=workspace.getBoundingClientRect();
 
-  if(!drag)return;
+    dragging.x=ev.clientX-r.left-dragOffset.x;
+    dragging.y=ev.clientY-r.top-dragOffset.y;
 
-  c.x=ox+(e.clientX-sx)/zoom;
-  c.y=oy+(e.clientY-sy)/zoom;
+    el.style.left=dragging.x+"px";
+    el.style.top=dragging.y+"px";
 
-  el.style.left=c.x+"px";
-  el.style.top=c.y+"px";
+    drawWires();
+  };
 
-  drawConnections();
-
- });
-
- el.addEventListener("pointerup",()=>{
-  drag=false;
- });
-
+  el.onpointerup=()=>{
+    dragging=null;
+    el.onpointermove=null;
+    el.onpointerup=null;
+  };
 }
 
-function pinClick(e,cid,pin){
+function getPinPosition(partId,pinIndex){
 
- e.stopPropagation();
+  const part=parts.find(p=>p.id===partId);
+  const el=document.querySelector(`[data-id="${partId}"]`);
 
- if(!selectedPin){
+  if(!part||!el)return null;
 
-  selectedPin={cid,pin};
+  const pin=el.querySelectorAll(".pin")[pinIndex];
 
-  e.currentTarget.querySelector(".pin-dot").style.background="#fff";
+  const pr=pin.getBoundingClientRect();
+  const wr=workspace.getBoundingClientRect();
 
-  return;
+  return {
+    x:pr.left-wr.left+pr.width/2,
+    y:pr.top-wr.top+pr.height/2
+  };
+}
 
- }
+function pinClicked(partId,pinIndex){
 
- if(
-  selectedPin.cid===cid &&
-  selectedPin.pin===pin
- ){
+  if(!selectedPin){
+
+    selectedPin={partId,pinIndex};
+
+    const p=parts.find(x=>x.id===partId);
+
+    document.getElementById("status").innerHTML=
+      `Selected <b>${p.type}</b> → ${p.pins[pinIndex].name}<br>Now select another pin.`;
+
+    return;
+  }
+
+  if(selectedPin.partId===partId &&
+     selectedPin.pinIndex===pinIndex){
+
+    selectedPin=null;
+    return;
+  }
+
+  const duplicate=wires.some(w=>
+    (w.a.partId===selectedPin.partId &&
+     w.a.pinIndex===selectedPin.pinIndex &&
+     w.b.partId===partId &&
+     w.b.pinIndex===pinIndex) ||
+    (w.b.partId===selectedPin.partId &&
+     w.b.pinIndex===selectedPin.pinIndex &&
+     w.a.partId===partId &&
+     w.a.pinIndex===pinIndex)
+  );
+
+  if(!duplicate){
+
+    wires.push({
+      a:{...selectedPin},
+      b:{partId,pinIndex}
+    });
+
+  }
+
   selectedPin=null;
+
+  document.getElementById("status").textContent=
+    "Connection created. Select another pin to continue.";
+
   render();
-  return;
- }
+  updateInfo();
+}
 
- const exists=connections.find(x=>
-  (x.a.cid===selectedPin.cid &&
-   x.a.pin===selectedPin.pin &&
-   x.b.cid===cid &&
-   x.b.pin===pin)
-  ||
-  (x.b.cid===selectedPin.cid &&
-   x.b.pin===selectedPin.pin &&
-   x.a.cid===cid &&
-   x.a.pin===pin)
- );
+function drawWires(){
 
- if(!exists){
+  svg.innerHTML="";
 
-  connections.push({
-   a:{...selectedPin},
-   b:{cid,pin}
+  wires.forEach((w,index)=>{
+
+    const a=getPinPosition(w.a.partId,w.a.pinIndex);
+    const b=getPinPosition(w.b.partId,w.b.pinIndex);
+
+    if(!a||!b)return;
+
+    const line=document.createElementNS(
+      "http://www.w3.org/2000/svg",
+      "line"
+    );
+
+    line.setAttribute("x1",a.x);
+    line.setAttribute("y1",a.y);
+    line.setAttribute("x2",b.x);
+    line.setAttribute("y2",b.y);
+    line.setAttribute("class","wire-line");
+
+    line.addEventListener("click",()=>{
+      if(confirm("Delete this wire?")){
+        wires.splice(index,1);
+        render();
+        updateInfo();
+      }
+    });
+
+    svg.appendChild(line);
+  });
+}
+
+function updateInfo(){
+
+  document.getElementById("partCount").textContent=parts.length;
+  document.getElementById("wireCount").textContent=wires.length;
+
+  const counts={};
+
+  parts.forEach(p=>{
+    counts[p.type]=(counts[p.type]||0)+1;
   });
 
- }
+  let html="";
 
- selectedPin=null;
+  Object.entries(counts).forEach(([name,count])=>{
+    html+=`<div class="item">${name} × ${count}</div>`;
+  });
 
- render();
-
-}
-
-function pinPosition(cid,pin){
-
- const c=components.find(x=>x.id===cid);
-
- if(!c)return null;
-
- const el=document.querySelector(
-  `.pin[data-comp="${cid}"][data-pin="${pin}"]`
- );
-
- if(!el)return null;
-
- const dot=el.querySelector(".pin-dot");
-
- return{
-  x:c.x+dot.offsetLeft+6,
-  y:c.y+dot.offsetTop+6
- };
-
-}
-
-function drawConnections(){
-
- document.querySelectorAll(".wire").forEach(e=>e.remove());
-
- connections.forEach(con=>{
-
-  const a=pinPosition(con.a.cid,con.a.pin);
-  const b=pinPosition(con.b.cid,con.b.pin);
-
-  if(!a||!b)return;
-
-  const line=document.createElement("div");
-
-  line.className="wire";
-
-  const dx=b.x-a.x;
-  const dy=b.y-a.y;
-
-  const len=Math.sqrt(dx*dx+dy*dy);
-
-  const angle=Math.atan2(dy,dx)*180/Math.PI;
-
-  line.style.left=a.x+"px";
-  line.style.top=a.y+"px";
-  line.style.width=len+"px";
-  line.style.transform=`rotate(${angle}deg)`;
-
-  document.getElementById("board").appendChild(line);
-
- });
-
-}
-
-function getNetworks(){
-
- const parent={};
-
- components.forEach(c=>parent[c.id+"."+definitions[c.type].pins[0][0]]=c.id+"."+definitions[c.type].pins[0][0]);
-
- function key(cid,pin){
-  return cid+"."+pin;
- }
-
- function find(x){
-
-  if(!parent[x])parent[x]=x;
-
-  if(parent[x]!==x)parent[x]=find(parent[x]);
-
-  return parent[x];
-
- }
-
- function union(a,b){
-
-  a=find(a);
-  b=find(b);
-
-  if(a!==b)parent[b]=a;
-
- }
-
- connections.forEach(c=>{
-  union(key(c.a.cid,c.a.pin),key(c.b.cid,c.b.pin));
- });
-
- return{parent,find};
-
+  document.getElementById("bom").innerHTML=
+    html||"No components.";
 }
 
 function diagnose(){
 
- let errors=[];
- let warnings=[];
+  let messages=[];
+  let errors=0;
+  let warnings=0;
 
- const types=components.map(c=>c.type);
+  if(parts.length===0){
+    messages.push('<div class="warning">No components on the board.</div>');
+    warnings++;
+  }
 
- if(
-  connections.some(c=>{
-   return(
-    (c.a.pin==="GND"&&c.b.pin.startsWith("+"))||
-    (c.b.pin==="GND"&&c.a.pin.startsWith("+"))
-   )
-  })
- ){
-  errors.push("Possible power-to-ground short detected.");
- }
+  if(parts.length>0 && wires.length===0){
+    messages.push('<div class="warning">Components exist but there are no connections.</div>');
+    warnings++;
+  }
 
- const hasLED=types.includes("LED")||types.includes("RGB LED");
- const hasResistor=types.includes("Resistor");
+  parts.forEach(p=>{
 
- if(hasLED&&!hasResistor){
-  errors.push("LED detected without a current-limiting resistor.");
- }
+    const connectedPins=new Set();
 
- if(
-  types.includes("ESP32-S3")&&
-  types.includes("12V Supply")&&
-  !types.includes("Buck Converter")
- ){
-  errors.push("12V source present with ESP32. Use a regulated converter before powering the ESP32.");
- }
+    wires.forEach(w=>{
 
- if(components.length===0){
-  warnings.push("No components have been placed.");
- }
+      if(w.a.partId===p.id)connectedPins.add(w.a.pinIndex);
+      if(w.b.partId===p.id)connectedPins.add(w.b.pinIndex);
 
- if(connections.length===0&&components.length>1){
-  warnings.push("Components exist but no connections are present.");
- }
+    });
 
- if(
-  types.includes("MOSFET")&&
-  !types.includes("GND")
- ){
-  warnings.push("MOSFET circuit should normally have a defined ground reference.");
- }
+    if(p.type!=="GND" && connectedPins.size===0){
 
- let html="";
+      messages.push(
+        `<div class="error">${p.type} is not connected.</div>`
+      );
 
- if(!errors.length&&!warnings.length){
-
-  html=
-   `<div class="ok">
-    <b>PASS</b><br>
-    No basic electrical errors detected.
-    </div>`;
-
- }else{
-
-  errors.forEach(x=>{
-   html+=`<div class="err"><b>ERROR</b><br>${x}</div>`;
+      errors++;
+    }
   });
 
-  warnings.forEach(x=>{
-   html+=`<div class="warn"><b>WARNING</b><br>${x}</div>`;
-  });
+  if(parts.some(p=>p.type==="LED")){
 
- }
+    const hasR=parts.some(p=>p.type==="Resistor");
 
- document.getElementById("aiOutput").innerHTML=html;
+    if(!hasR){
 
- document.getElementById("errorCount").textContent=errors.length;
+      messages.push(
+        '<div class="warning">LED detected without a resistor. A current-limiting resistor is normally required.</div>'
+      );
 
+      warnings++;
+    }
+  }
+
+  if(errors===0 && warnings===0){
+
+    messages.push(
+      '<div class="ok">✓ No basic configuration errors detected.</div>'
+    );
+  }
+
+  messages.unshift(
+    `<div><b>${errors}</b> errors • <b>${warnings}</b> warnings</div>`
+  );
+
+  document.getElementById("diagnostics").innerHTML=
+    messages.join("");
 }
 
-function runSimulation(){
+function simulate(){
 
- diagnose();
+  let output=[];
 
- const led=components.find(c=>
-  c.type==="LED"
- );
+  const hasSupply=parts.some(p=>
+    p.type==="5V Supply" || p.type==="12V Supply"
+  );
 
- const resistor=components.find(c=>
-  c.type==="Resistor"
- );
+  const hasLED=parts.some(p=>
+    p.type==="LED" || p.type==="RGB LED"
+  );
 
- let voltage=0;
- let current=0;
+  const hasResistor=parts.some(p=>
+    p.type==="Resistor"
+  );
 
- if(
-  components.some(c=>c.type==="5V Supply")&&
-  led&&
-  resistor
- ){
+  if(!hasSupply){
 
-  voltage=5;
+    output.push(
+      '<div class="error">Simulation stopped: no power supply.</div>'
+    );
 
-  const resistance=220;
+  }else if(hasLED && !hasResistor){
 
-  const vf=2;
+    output.push(
+      '<div class="warning">Power detected, but LED protection resistor is missing.</div>'
+    );
 
-  current=(voltage-vf)/resistance;
+  }else if(hasLED && hasResistor && wires.length>0){
 
- }
+    output.push(
+      '<div class="ok">✓ Circuit has a power source, LED and resistor.</div>'
+    );
 
- else if(
-  components.some(c=>c.type==="12V Supply")&&
-  led&&
-  resistor
- ){
+    output.push(
+      '<div class="ok">Estimated state: LED may be ON if the wiring path is electrically complete.</div>'
+    );
 
-  voltage=12;
+  }else{
 
-  current=(voltage-2)/220;
+    output.push(
+      '<div class="warning">Circuit is incomplete.</div>'
+    );
+  }
 
- }
-
- document.getElementById("voltage").textContent=
-  voltage?voltage.toFixed(2)+" V":"—";
-
- document.getElementById("current").textContent=
-  current?(current*1000).toFixed(1)+" mA":"—";
-
- const status=document.getElementById("simulationStatus");
-
- if(current){
-
-  status.className="status ok";
-
-  status.innerHTML=
-   `<b>Simulation running</b><br>
-    Basic DC calculation completed.<br>
-    LED current: ${(current*1000).toFixed(1)} mA`;
-
- }else{
-
-  status.className="status warn";
-
-  status.innerHTML=
-   "Not enough information for a basic DC calculation.";
-
- }
-
-}
-
-function showBOM(){
-
- const counts={};
-
- components.forEach(c=>{
-  counts[c.type]=(counts[c.type]||0)+1;
- });
-
- let html="<h2>Bill of Materials</h2>";
-
- if(!Object.keys(counts).length){
-
-  html+="<p>No components.</p>";
-
- }else{
-
-  Object.entries(counts).forEach(([type,n])=>{
-   html+=`
-    <div class="metric">
-     <span>${type}</span>
-     <b>x${n}</b>
-    </div>`;
-  });
-
- }
-
- html+=`
-  <br>
-  <button onclick="closeModal()">Close</button>
- `;
-
- openModal(html);
-
-}
-
-function loadSmartCar(){
-
- clearBoard(false);
-
- addComponent("12V Supply",100,180);
- addComponent("Fuse",300,180);
- addComponent("Buck Converter",500,180);
- addComponent("ESP32-S3",750,130);
- addComponent("MOSFET",1000,300);
- addComponent("Resistor",1000,500);
- addComponent("RGB LED",1250,450);
- addComponent("GND",1250,650);
-
- document.getElementById("aiOutput").innerHTML=
-  `<div class="ok">
-   <b>SmartCar ONE V1 loaded.</b><br><br>
-   Architecture:<br>
-   Vehicle 12V → Fuse → Buck → ESP32-S3<br>
-   ESP32 GPIO → MOSFET → lighting/accessory.
-   </div>`;
-
+  document.getElementById("diagnostics").innerHTML=
+    output.join("");
 }
 
 function saveProject(){
 
- const data={
-  components,
-  connections
- };
+  const data={
+    parts,
+    wires,
+    nextId
+  };
 
- localStorage.setItem(
-  "ai_virtual_workshop_v1",
-  JSON.stringify(data)
- );
+  localStorage.setItem(
+    "AI_VIRTUAL_WORKSHOP_V2",
+    JSON.stringify(data)
+  );
 
- alert("Project saved on this device.");
-
+  document.getElementById("status").innerHTML=
+    '<span class="ok">✓ Project saved on this device.</span>';
 }
 
 function loadProject(){
 
- const raw=localStorage.getItem(
-  "ai_virtual_workshop_v1"
- );
+  const raw=localStorage.getItem(
+    "AI_VIRTUAL_WORKSHOP_V2"
+  );
 
- if(!raw)return;
+  if(!raw){
 
- try{
+    document.getElementById("status").textContent=
+      "No saved project found.";
+
+    return;
+  }
 
   const data=JSON.parse(raw);
 
-  components=data.components||[];
-  connections=data.connections||[];
+  parts=data.parts||[];
+  wires=data.wires||[];
+  nextId=data.nextId||1;
 
-  render();
-
- }catch(e){}
-
-}
-
-function newProject(){
-
- if(confirm("Create a new project?")){
-
-  components=[];
-  connections=[];
   selectedPin=null;
 
   render();
+  updateInfo();
 
-  document.getElementById("aiOutput").textContent=
-   "New project created.";
-
- }
-
+  document.getElementById("status").innerHTML=
+    '<span class="ok">✓ Project loaded.</span>';
 }
 
-function clearBoard(confirmIt=true){
+function clearBoard(){
 
- if(confirmIt&&!confirm("Clear the workshop?"))return;
+  if(!confirm("Delete all components and wires?"))return;
 
- components=[];
- connections=[];
- selectedPin=null;
+  parts=[];
+  wires=[];
+  selectedPin=null;
 
- render();
+  render();
+  updateInfo();
 
+  document.getElementById("diagnostics").textContent=
+    "Board cleared.";
+
+  document.getElementById("status").textContent=
+    "Select a pin to start wiring.";
 }
 
-function zoomIn(){
-
- zoom=Math.min(1.8,zoom+.1);
-
- document.getElementById("board").style.transform=
-  `scale(${zoom})`;
-
-}
-
-function zoomOut(){
-
- zoom=Math.max(.5,zoom-.1);
-
- document.getElementById("board").style.transform=
-  `scale(${zoom})`;
-
-}
-
-function openModal(html){
-
- document.getElementById("modalContent").innerHTML=html;
-
- document.getElementById("modal").classList.add("show");
-
-}
-
-function closeModal(){
-
- document.getElementById("modal").classList.remove("show");
-
-}
-
-function showLibrary(){
-
- alert(
-  "On mobile, use the component buttons from the Components menu. " +
-  "The full library is available on larger screens."
- );
-
-}
-
-loadProject();
-
-render();
+/* Starter example */
+addPart("5V Supply",100,100);
+addPart("Resistor",350,150);
+addPart("LED",600,200);
+addPart("GND",600,350);
 
 </script>
 
